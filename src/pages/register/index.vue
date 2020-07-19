@@ -1,7 +1,7 @@
 <template>
   <view class="content">
     <view class="top_bar">
-      <view class="top_bar_left">
+      <view class="top_bar_left" @tap="toLogin">
         <image src="../../static/images/common/jiantou.png"></image>
       </view>
     </view>
@@ -12,30 +12,30 @@
       <view class="title">注册</view>
       <view class="inputs">
         <view class="input_box">
-          <input type="text" placeholder="请取个名字" placeholder-style="color:#aaa;font-weight:400;" />
-          <view class="employ" v-if="employ[0]">该用户名已存在</view>
-          <view class="img" v-if="isShow[0]">
+          <input type="text" placeholder="请取个名字" placeholder-style="color:#aaa;font-weight:400;" v-model="info.username" />
+          <view class="employ" v-show="employUser">该用户名已存在</view>
+          <view class="img" v-show="isUsers">
             <image src="../../static/images/login/Group.png"></image>
           </view>
         </view>
         <view class="input_box">
-          <input type="text" placeholder="请输入邮箱" placeholder-style="color:#aaa;font-weight:400;" />
-          <view class="employ" v-if="employ[1]">该邮箱已注册</view>
-          <view class="invalid" v-if="isShow[2]">邮箱无效</view>
-          <view class="img" v-if="isShow[1]">
+          <input type="text" placeholder="请输入邮箱" placeholder-style="color:#aaa;font-weight:400;" @blur="isEmail" v-model="info.email" />
+          <view class="employ" v-show="employEmail">该邮箱已注册</view>
+          <view class="invalid" v-show="invalid">邮箱无效</view>
+          <view class="img" v-show="isEmails">
             <image src="../../static/images/login/Group.png"></image>
           </view>
         </view>
         <view class="input_box">
-          <input placeholder-style="color:#aaa;font-weight:400;" :type="type" placeholder="输入您的密码" />
-          <view class="employ" v-if="employ[2]">该邮箱已注册</view>
-          <view class="img" @click="changeChanka">
+          <input type="type" placeholder="输入您的密码" placeholder-style="color:#aaa;font-weight:400;" v-model="info.password" />
+          <view class="employ" v-show="employPass">该邮箱已注册</view>
+          <view class="img" @tap="changeChanka">
             <image src="../../static/images/login/chakan.png"></image>
           </view>
         </view>
         
       </view>
-      <view class="submit">注册</view>
+      <view :class="[{'active':isok} , 'submit']">注册</view>
     </view>
   </view>
 </template>
@@ -44,10 +44,19 @@ export default {
   data() {
       return {
         type: 'password',
-        // isShow 前两项控制图片显示隐藏，第三个控制邮箱验证
-        isShow: [false,false,false],
+        isUsers:false,
+        isEmails:false,
         // employ用来控制每个input输入框验证
-        employ: [false,false,false]
+        employUser: false,
+        employEmail: false,
+        employPass: false,
+        invalid:false,
+        isok: false,
+        info: {
+          username: '',
+          email: '',
+          password: ''
+        }
       }
   },
   methods: {
@@ -57,9 +66,34 @@ export default {
       } else {
         this.type = 'text'
       }
+    },
+    isEmail(e){
+      const reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/
+      if(e.detail.value.length > 0) {
+        if(reg.test(e.detail.value)){
+          this.isEmails = !this.isEmails
+        } else {
+          this.invalid = !this.invalid
+        }
+      }
       
+    },
+    toLogin(){
+       uni.navigateTo({
+        url: '/pages/login/index'
+      })
     }
-  }
+  },
+  watch: {
+    isok(){
+      if(this.isUsers && this.isEmails && this.employPass){
+        this.isok = true
+      }else{
+        this.isok = false
+      }
+
+    }
+  },
 }
 </script>
 <style lang="scss" scoped>
@@ -143,18 +177,22 @@ export default {
       right: 40rpx;
     }
   }
-  .submit{
-    box-shadow: 0 50rpx 32rpx -36rpx rgba(255,228,49,.4);
+  .submit{  
     margin: 0 auto;
     width: 520rpx;
     height: 96rpx;
     line-height: 96rpx;
     border-radius: 48rpx;
     text-align: center;
-    background: $uni-color-primary;
+    background: #d4d4d6;
     font-size: $uni-font-size-lg;
     font-weight: 500;
+    color: #fff;
+  }
+  .active{
+    background: $uni-color-primary;
     color: $uni-text-color;
+    box-shadow: 0 50rpx 32rpx -36rpx rgba(255,228,49,.4);
   }
 }
 </style>

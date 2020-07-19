@@ -1,7 +1,7 @@
 <template>
   <view class="content">
     <view class="top_bar">
-      <view class="top_bar_right">注册</view>
+      <view class="top_bar_right" @tap="toRegister">注册</view>
     </view>
     <view class="logo">
       <image src="../../static/images/login/logo.png"></image>
@@ -10,21 +10,34 @@
       <view class="title">登录</view>
       <view class="msg">您好，欢迎来到 yike！</view>
       <view class="inputs">
-        <input type="text" placeholder="用户名/邮箱" placeholder-style="color:#aaa;font-weight:400;" />
-        <input placeholder-style="color:#aaa;font-weight:400;" type="password" placeholder="密码" />
+        <input type="text" placeholder="用户名/邮箱" placeholder-style="color:#aaa;font-weight:400;" v-model="info.user" />
+        <input placeholder-style="color:#aaa;font-weight:400;" type="password" placeholder="密码" v-model="info.password"/>
         <view class="tips">输入用户名或密码错误!</view>
       </view>
-      <view class="submit" @click="tag">登录</view>
+      <view class="submit" @tap="login">登录</view>
     </view>
   </view>
 </template>
 <script>
 export default {
+  data() {
+    return {
+      info: {
+        user: '',
+        password: ''
+      }
+    }
+  },
   methods: {
-    tag(){
-      this.$http({
-        url: '/test'
-      }).then((res)=>console.log(res))
+    login(){
+      if(this.info.user && this.info.password){
+        console.log('提交')
+      }
+    },
+    toRegister(){
+      uni.navigateTo({
+        url: '/pages/register/index'
+      })
     }
   }
 }
