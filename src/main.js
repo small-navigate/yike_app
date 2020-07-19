@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import App from './App'
+import requset from './utils/request'
 
 Vue.config.productionTip = false
+Vue.prototype.$http = requset
+
 
 App.mpType = 'app'
 

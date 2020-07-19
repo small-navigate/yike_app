@@ -14,12 +14,20 @@
         <input placeholder-style="color:#aaa;font-weight:400;" type="password" placeholder="密码" />
         <view class="tips">输入用户名或密码错误!</view>
       </view>
-      <view class="submit">登录</view>
+      <view class="submit" @click="tag">登录</view>
     </view>
   </view>
 </template>
 <script>
-export default {}
+export default {
+  methods: {
+    tag(){
+      this.$http({
+        url: '/test'
+      }).then((res)=>console.log(res))
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
 .top_bar {
