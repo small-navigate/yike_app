@@ -35,7 +35,7 @@
       <view class="friends">
         <view class="friends_list" v-for="item in friends" :key="item.id">
           <view class="friends_list_left">
-            <text class="tip">{{item.tip}}</text>
+            <text class="tip"  v-if="item.tip>0">{{item.tip}}</text>
             <image src="../../static/images/img/2.jpg"></image>
           </view>
           <view class="friends_list_right">
@@ -59,7 +59,7 @@ export default {
         {
           id: 1,
           imgurl: '1.jpg',
-          tip: 2,
+          tip: 0,
           name: '背景',
           time: new Date(),
           news: 'vue+node.js 0到1实现即时通讯聊天室-前端篇3'
@@ -204,23 +204,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../commons/css/mycss.scss";
 .content{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   .top_bar{
-    height: calc(108rpx + var(--status-bar-height));
-    width: 100%;
     background-color: $uni-bg-color;
     position: fixed;
     top: 0;
     z-index: 100;
     box-shadow: 0 1px 0 0 rgba(0,0,0,.1);
-    display: flex;
-    box-sizing: border-box;
     padding: 20rpx 50rpx;
-    padding-top: calc(20rpx + var(--status-bar-height));
     .top_bar_left{
       flex: 1;
       line-height: 88rpx;
@@ -283,13 +279,14 @@ export default {
           }
           .tip{
             position: absolute;
-            top: -6rpx;
+            top: -10rpx;
             left: 68rpx;
             z-index: 10;
             height: 36rpx;
-            min-width: 36rpx;
+            min-width: 20rpx;
             background: $uni-color-warning;
-            border-radius: $uni-border-radius-circle;
+            padding: 0 8rpx;
+            border-radius: 18rpx;
             line-height: 36rpx;
             text-align: center;
             color: $uni-text-color-inverse;

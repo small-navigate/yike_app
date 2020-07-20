@@ -2,7 +2,7 @@
   "pages": [
 
     {
-      "path": "pages/home/index",
+      "path": "pages/login/index",
       "style": {
         "navigationStyle": "custom"
       }
@@ -14,7 +14,13 @@
       }
     },
     {
-      "path": "pages/login/index",
+      "path": "pages/home/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/search/index",
       "style": {
         "navigationStyle": "custom"
       }

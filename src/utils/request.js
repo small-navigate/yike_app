@@ -1,5 +1,5 @@
 export default (params) => {
-  params.url = 'http://192.168.101.13:3000/api' + params.url
+  params.url = 'http://192.168.101.13:3000' + params.url
   return new Promise((resolve, reject) => {
     uni.request({
       ...params,

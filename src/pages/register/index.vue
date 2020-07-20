@@ -27,7 +27,8 @@
           </view>
         </view>
         <view class="input_box">
-          <input type="type" placeholder="输入您的密码" placeholder-style="color:#aaa;font-weight:400;" v-model="info.password" />
+          <input v-if="types" placeholder="输入您的密码" placeholder-style="color:#aaa;font-weight:400;" v-model="info.password" type="password"/>
+          <input v-else placeholder="输入您的密码" placeholder-style="color:#aaa;font-weight:400;" v-model="info.password" type="text"/>
           <view class="employ" v-show="employPass">该邮箱已注册</view>
           <view class="img" @tap="changeChanka">
             <image src="../../static/images/login/chakan.png"></image>
@@ -35,7 +36,7 @@
         </view>
         
       </view>
-      <view :class="[{'active':isok} , 'submit']">注册</view>
+      <view :class="[{'active':isok} , 'submit']" @tap="register">注册</view>
     </view>
   </view>
 </template>
@@ -43,7 +44,7 @@
 export default {
   data() {
       return {
-        type: 'password',
+        types: true,
         isUsers:false,
         isEmails:false,
         // employ用来控制每个input输入框验证
@@ -61,11 +62,7 @@ export default {
   },
   methods: {
     changeChanka(){
-      if(this.type == 'text'){
-        this.type = 'password'
-      } else {
-        this.type = 'text'
-      }
+      this.types = !this.types
     },
     isEmail(e){
       const reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/
@@ -82,6 +79,14 @@ export default {
        uni.navigateTo({
         url: '/pages/login/index'
       })
+    },
+    async register(){
+      const res = await this.$http({
+        url: '/userRouter/register',
+        method: 'post',
+        data: this.info
+      })
+      console.log(res)
     }
   },
   watch: {
@@ -97,12 +102,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.top_bar {
-  display: flex;
-  box-sizing: border-box;
-  padding-top: var(--status-bar-height);
-  padding-right: 32rpx;
-  height: calc(88rpx + var(--status-bar-height));
+@import "../../commons/css/mycss.scss";
   .top_bar_left {
     height: 88rpx;
     width: 88rpx;
@@ -113,17 +113,7 @@ export default {
       width: 48rpx;
     }
   }
-}
-.logo {
-  padding-top: 150rpx;
-  width: 194rpx;
-  height: 92rpx;
-  margin: 0 auto;
-  image{
-    width: 100%;
-    height: 100%;
-  }
-}
+
 .mian{
   box-sizing: border-box;
   padding: 54rpx 50rpx 0;
@@ -134,17 +124,6 @@ export default {
     line-height: 80rpx;
   }
   .inputs{
-    padding-top: 8rpx;
-    padding-bottom: 120rpx;
-    input{
-      height: 88rpx;
-      padding-top: 40rpx;
-      font-size: $uni-font-size-lg;
-      font-weight: 500;
-      color: $uni-text-color;
-      line-height: 88rpx;
-      border-bottom: 1px solid $uni-border-color;
-    }
     .input_box{
       position: relative;
     }
@@ -178,15 +157,7 @@ export default {
     }
   }
   .submit{  
-    margin: 0 auto;
-    width: 520rpx;
-    height: 96rpx;
-    line-height: 96rpx;
-    border-radius: 48rpx;
-    text-align: center;
     background: #d4d4d6;
-    font-size: $uni-font-size-lg;
-    font-weight: 500;
     color: #fff;
   }
   .active{
