@@ -10,9 +10,10 @@
       <view class="title">登录</view>
       <view class="msg">您好，欢迎来到 yike！</view>
       <view class="inputs">
-        <input type="text" placeholder="用户名/邮箱" placeholder-style="color:#aaa;font-weight:400;" v-model="info.user" />
-        <input placeholder-style="color:#aaa;font-weight:400;" type="password" placeholder="密码" v-model="info.password"/>
-        <view class="tips">输入用户名或密码错误!</view>
+        <input type="text" placeholder="用户名/邮箱" placeholder-style="color:#aaa;font-weight:400;" v-model="info.user" @blur="tagBlur" />
+        <input placeholder-style="color:#aaa;font-weight:400;" type="password" placeholder="密码" v-model="info.password" @blur="tagBlur"/>
+        <view class="tips" v-if="isShowPass">输入用户名或密码错误!</view>
+        <view class="tips" v-if="isShowUser">该用户名/邮箱尚未注册!</view>
       </view>
       <view class="submit" @tap="login">登录</view>
     </view>
@@ -25,23 +26,37 @@ export default {
       info: {
         user: '',
         password: ''
-      }
+      },
+      isShowPass: false,
+      isShowUser: false
     }
   },
   methods: {
-    login(){
+    async login(){
       if(this.info.user && this.info.password){
-        console.log('提交')
+          console.log('提交')
+          const {data:res} = await this.$http({ 
+            url: '/userRouter/login',
+            method: 'POST',
+            data:this.info
+          })
+          if(res.meta.status == '200'){
+
+          } else if(res.meta.status == '400'){
+            this.isShowPass = true
+          } else if(res.meta.status == '401'){
+            this.isShowUser = true
+          }
       }
-      this.$http({ 
-        url: '/mail',
-        method: 'POST'
-      })
     },
     toRegister(){
       uni.navigateTo({
         url: '/pages/register/index'
       })
+    },
+    tagBlur(){
+      this.isShowPass = false
+      this.isShowUser = false
     }
   }
 }
